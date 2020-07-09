@@ -4,7 +4,7 @@
 
 Quick app I made that manages your Coinbase and Coinbase Pro (for now) portfolio using a FIFO method.
 
-Status: Functionality is working. Needs interface (learning Angular and React).
+Status: PoC. Works for me :) . Needs interface (learning Angular and React).
 
 
 1. Download your trades in csv format.
