@@ -73,7 +73,6 @@ async function recordSell(orderObj, amountLeft) {
     Trade.findOne({ buyAmount: { '$gt': 0 }, buyUnit: orderObj.sellUnit }).sort({ buyDate: 1 })
       .then(async (doc) => {
         if (doc == undefined) {
-          //reject('rejected' + doc);
           var rechazo = await recordRechazo(orderObj, amount);
           console.log(rechazo);
           resolve(rechazo);
@@ -133,7 +132,6 @@ async function recordSell(orderObj, amountLeft) {
             date: orderObj.date
           });
           amount -= doc.buyAmount; //pendienteVenta
-          // fee.fee = 0; //fee completa en la primera vuelta
           doc.buyAmount = 0; //orden de compra completamente vendida
           await doc.save()
             .then(async (result) => {

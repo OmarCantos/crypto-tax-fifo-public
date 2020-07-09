@@ -7,7 +7,6 @@ async function processCSV() {
   //@TODO: Run both and resolve() one Promise?
   await TradesCB.find({ TransactionType: { $in: ['Buy'] } }).sort({ Timestamp: 1 })
     .then(async (doc) => {
-      console.log('Timestamptradeid: ' + doc.Timestamp);
       for (line of doc) {
         console.log('line.Timestamp: ' + line.Timestamp);
         await processOrders(line);
@@ -22,10 +21,7 @@ async function processCSV() {
   //@TODO: Make it in a single run. $group?
   await TradesCBPro.find({ type: { $in: ['match', 'fee'] } }).sort({ time: 1 }).distinct('tradeid')
     .then(async (doc) => {
-      console.log('tradeid: ' + doc.tradeid);
       for (line of doc) {
-        console.log('line: ' + line.tradeid);
-        // await processOrdersPro(line);
         await TradesCBPro.find({ tradeid: line })
           .then(async (doc) => {
             console.log('inside testBatch-find-then: ' + doc.tradeid);
@@ -39,7 +35,7 @@ async function processCSV() {
     .catch((err) => {
       console.log('Find distinct ids err: ' + err)
     })
-  console.log('after for');
+  console.log('Finished processing CSV collection');
 }
 exports.processCSV = processCSV;
 
@@ -73,20 +69,20 @@ async function processOrdersPro(dbObj) {
         sellId = line.tradeid;
         sellAmount = line.amount;
         sellUnit = line.unit;
-        sellDate = line.time;//).substring(0, 10);
+        sellDate = line.time;
       }
       if (line.amount > 0) {
         buyId = line.tradeid;
         buyUnit = line.unit;
         buyAmount = line.amount;
-        buyDate = line.time;//).substring(0, 10);
+        buyDate = line.time;
 
       }
     } if (line.type == 'fee') {
       feeId = line.tradeid;
       feeUnit = line.unit;
       feeAmount = line.amount;
-      feeDate = line.time;//).substring(0, 10);
+      feeDate = line.time;
     }
   }
 
@@ -100,9 +96,6 @@ async function processOrdersPro(dbObj) {
     buyFiatPrice = await CoinbaseApi.getFiatPrice(buyUnit, 'EUR', date);
     sellFiatPrice = await CoinbaseApi.getFiatPrice(sellUnit, 'EUR', date);
     feeFiatPrice = await CoinbaseApi.getFiatPrice(feeUnit, 'EUR', date);
-    // buyFiatPrice = 69;
-    // sellFiatPrice = 69;
-    // feeFiatPrice = 69;
   }
   var orderObj = {
     tradeId: tradeid,

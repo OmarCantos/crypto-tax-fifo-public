@@ -3,6 +3,7 @@ const fs = require('fs');
 const Orders = require('./controllers/orders');
 const Trades = require('./controllers/trades');
 
+
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/newtest',
   { useNewUrlParser: true, useUnifiedTopology: true })
@@ -40,7 +41,7 @@ async function startTest() {
   await Orders.processCSV();
 
 
-  //From Order Collection to Trade Collection (sells eat from first buys first)
+  //From Order Collection to Trade Collection
   await Trades.processTrades('2019-01-01', '2020-01-01');
 
 
