@@ -90,7 +90,7 @@ async function startTest() {
   //       console.log('error');
   //       return;
   //     }
-  //     console.log('TOTAL AGRI: ' + total);
+  //     console.log('TOTAL: ' + total);
   //   })
   //   .catch((err) => {
   //     console.log('ERROR-inside testBatch-find-then: ' + err);
